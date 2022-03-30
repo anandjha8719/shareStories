@@ -1,11 +1,13 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const connectDB = require('./config/db');
 
@@ -27,7 +29,8 @@ app.use(
     session({
         secret: 'something',
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        store: new MongoStore({mongooseConnection: mongoose.connection})
     })
 )
 
@@ -39,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
+app.use('/stories', require('./routes/stories'));
 
 
 
