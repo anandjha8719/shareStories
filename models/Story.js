@@ -4,9 +4,8 @@ const StorySchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        trim: true
     },
-    displbodyayName: {
+    body: {
         type: String,
         required: true
     },

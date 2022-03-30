@@ -17,12 +17,22 @@ require('./config/passport')(passport)
 
 connectDB();
 
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.engine('.hbs', exphbs.engine({defaultLayout: 'main', extname: '.hbs'}));
+const { formatDate } = require('./helpers/hbs')
+
+app.engine('.hbs', exphbs.engine({
+    helpers: {
+        formatDate,
+    },
+    defaultLayout: 'main',
+    extname: '.hbs'
+}));
 app.set('view engine', 'hbs');
 
 app.use(
