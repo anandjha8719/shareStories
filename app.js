@@ -24,11 +24,23 @@ if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-const { formatDate } = require('./helpers/hbs')
+const {
+    formatDate,
+    stripTags,
+    truncate,
+    editIcon,
+    select,
+  } = require('./helpers/hbs')
+  
+
 
 app.engine('.hbs', exphbs.engine({
     helpers: {
         formatDate,
+        stripTags,
+        truncate,
+        editIcon,
+        select,
     },
     defaultLayout: 'main',
     extname: '.hbs'
@@ -47,18 +59,18 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Setting global var
+app.use(function (req, res, next) {
+    res.locals.user = req.user || null
+    next()
+  })
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/stories', require('./routes/stories'));
-
-
-
-
-
-
 
 
 
